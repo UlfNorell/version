@@ -14,7 +14,10 @@ getBundles :: IO [Bundle]
 getBundles = do
   home <- getEnv "HOME"
   let root = home </> ".version"
-  files <- map (root </>) . filter (not . isPrefixOf ".") <$> listDirectory (home </> ".version")
+  files <- map (root </>)
+         . filter (not . isPrefixOf ".")
+         . filter (not . isSuffixOf ".sh")
+        <$> listDirectory (home </> ".version")
   let getBundle file = do
         mb <- parseFile [("HOME", home)] file
         case mb of
